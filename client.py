@@ -98,6 +98,10 @@ def main():
                 if not len_data:
                     print(f"{line}: ERR Connection closed by server")
                     continue
+                resp_len = int(len_data.decode('utf-8'))
+                resp_body = sock.recv(resp_len - 3)  # 总长度-3位长度 = 响应体长度
+                response = resp_body.decode('utf-8').strip()
+                print(f"{line}: {response}")
 
             response = response_buffer.decode().strip()
             print(f"{line}: {response}")
