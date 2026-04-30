@@ -54,12 +54,39 @@ def main():
                     key = parts[1]
                     op_code = "R" if cmd == "READ" else "G"
                     body = f"{op_code} {key}"
-                    total_len = 3 + 1 + len(body)  # 3位长度 + 空格 + 内容
-                    if total_len > 1000:  # 最大消息长度限制（3位数字最大999）
+                    total_len = 3 + 1 + len(body)  
+                    if total_len > 1000:  
                         print(f"{line}: ERR Message too long")
                         continue
-                    # 构建消息：0填充3位长度 + 空格 + 内容
+                    
                     message = f"{total_len:03d} {body}"
+                elif cmd == "PUT":
+                    if len(parts) < 3:
+                        print(f"{line}: ERR Invalid format (missing value)")
+                        continue
+                    key = parts[1]
+                    value = parts[2]
+                    if len(key) > 999 or len(value) > 999:
+                        print(f"{line}: ERR Key/Value too long (max 999 chars)")
+                        continue
+                    if len(f"{key} {value}") > 970:
+                        print(f"{line}: ERR Key+Value too long (max 970 chars)")
+                        continue
+                    body = f"P {key} {value}"
+                    total_len = 3 + 1 + len(body)
+                    if total_len > 1000:
+                        print(f"{line}: ERR Message too long")
+                        continue
+                    message = f"{total_len:03d} {body}"
+
+                else:
+                    print(f"{line}: ERR Unknown command ({cmd})")
+                    continue
+
+            except Exception as e:
+                print(f"{line}: ERR Invalid message ({e})")
+                continue
+
 
             # TASK 3: Send the message to the server, then receive the response.
             # - Send:    sock.sendall(message.encode())
