@@ -53,6 +53,13 @@ def main():
                         continue
                     key = parts[1]
                     op_code = "R" if cmd == "READ" else "G"
+                    body = f"{op_code} {key}"
+                    total_len = 3 + 1 + len(body)  # 3位长度 + 空格 + 内容
+                    if total_len > 1000:  # 最大消息长度限制（3位数字最大999）
+                        print(f"{line}: ERR Message too long")
+                        continue
+                    # 构建消息：0填充3位长度 + 空格 + 内容
+                    message = f"{total_len:03d} {body}"
 
             # TASK 3: Send the message to the server, then receive the response.
             # - Send:    sock.sendall(message.encode())
