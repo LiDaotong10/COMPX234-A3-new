@@ -92,7 +92,8 @@ def main():
             # - Send:    sock.sendall(message.encode())
             # - Receive: first read 3 bytes to get the response size (like the server does).
             #            Then read the remaining (size - 3) bytes to get the response body.
-
+            try:
+                sock.sendall(message.encode('utf-8'))
 
             response = response_buffer.decode().strip()
             print(f"{line}: {response}")
