@@ -46,7 +46,8 @@ def main():
             # X is "R" for READ and "G" for GET.
             # Hint: for READ/GET, size = 6 + len(key). For PUT, size = 7 + len(key) + len(value).
             # Reject lines with invalid format or key+" "+value > 970 chars.
-
+            try:
+                if cmd in ["READ", "GET"]:
 
             # TASK 3: Send the message to the server, then receive the response.
             # - Send:    sock.sendall(message.encode())
