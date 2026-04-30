@@ -48,6 +48,11 @@ def main():
             # Reject lines with invalid format or key+" "+value > 970 chars.
             try:
                 if cmd in ["READ", "GET"]:
+                    if len(parts) < 2:
+                        print(f"{line}: ERR Invalid format (missing key)")
+                        continue
+                    key = parts[1]
+                    op_code = "R" if cmd == "READ" else "G"
 
             # TASK 3: Send the message to the server, then receive the response.
             # - Send:    sock.sendall(message.encode())
